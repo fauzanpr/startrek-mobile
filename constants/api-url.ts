@@ -12,7 +12,8 @@ export const SU_API_URL = {
         INDEX: "/su/dashboard/total-products/"
     },
     COMPANY: {
-        INDEX: "/su/company/companies/"
+        INDEX: "/su/company/companies/",
+        DETAIL: "/su/company/companies/:id/"
     }
 }
 

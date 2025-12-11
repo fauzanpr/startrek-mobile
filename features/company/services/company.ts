@@ -16,3 +16,10 @@ export const postCompany = (data?: Record<any,any>) => {
         data: data
     })
 }
+
+export const deleteCompany = (id: string) => {
+    return api({
+        method: "DELETE",
+        urlKey: API_URL.COMPANY.DETAIL.replace(":id", id),
+    })
+}

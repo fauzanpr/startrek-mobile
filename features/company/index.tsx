@@ -18,50 +18,55 @@ function CompanyPage() {
   });
 
   return (
-    <View className='h-full'>
-      <View className='p-6 flex gap-4'>
-        <View className='flex flex-row items-center gap-2'>
-          <Text className='text-2xl font-medium text-center'>Company</Text>
-          <Pressable onPress={() => refetch()}>
-            <Ionicons name='reload' size={18} className='bg-white p-1 border border-gray-200 rounded-lg' />
-          </Pressable>
-        </View>
+    <>
+      <View className='h-full'>
+        <View className='p-6 flex gap-4'>
+          <View className='flex flex-row items-center gap-2'>
+            <Text className='text-2xl font-medium text-center'>Company</Text>
+            <Pressable onPress={() => refetch()}>
+              <Ionicons name='reload' size={18} className='bg-white p-1 border border-gray-200 rounded-lg' />
+            </Pressable>
+          </View>
 
-        <View className='mb-4'>
-          <Searchbar
-            value={search}
-            onChangeText={(text) => setSearch(text)}
-            placeholder='Search here'
-            style={{
-              backgroundColor: "white"
-            }}
-          />
-        </View>
+          <View className='mb-4'>
+            <Searchbar
+              value={search}
+              onChangeText={(text) => setSearch(text)}
+              placeholder='Search here'
+              style={{
+                backgroundColor: "white"
+              }}
+            />
+          </View>
 
-        <ScrollView className='flex gap-4 mb-20'>
-          {isFetching ? (
-            <ActivityIndicator size={18} />
-          ) : CompanyMapper(data?.results || [])?.map(company => (
-            <CompanyCard key={company?.subid} data={{ created: company.created, name: company.name }} />
-          ))}
-        </ScrollView>
+          <ScrollView className='flex gap-4 mb-20'>
+            {isFetching ? (
+              <ActivityIndicator size={18} />
+            ) : CompanyMapper(data?.results || [])?.map(company => (
+              <CompanyCard
+                key={company?.subid} 
+                data={company || {}}
+                />
+            ))}
+          </ScrollView>
+        </View>
+        <AnimatedFAB
+          icon={"plus"}
+          label='Add Company'
+          extended={false}
+          color={"white"}
+          onPress={() => {
+            router.replace("/(tabs)/company/add")
+          }}
+          style={{
+            position: "absolute",
+            bottom: 20,
+            right: 20,
+            backgroundColor: AppConfig.palette.primary
+          }}
+        />
       </View>
-      <AnimatedFAB
-        icon={"plus"}
-        label='Add Company'
-        extended={false}
-        color={"white"}
-        onPress={() => {
-          router.replace("/(tabs)/company/add")
-        }}
-        style={{
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-          backgroundColor: AppConfig.palette.primary
-        }}
-      />
-    </View>
+    </>
   )
 }
 
