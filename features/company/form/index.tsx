@@ -17,7 +17,7 @@ function CompanyFormPage() {
     const queryClient = useQueryClient();
     const { slug } = useLocalSearchParams();
 
-    const { control, handleSubmit } = useForm<TRequest>({
+    const { control, handleSubmit, reset } = useForm<TRequest>({
         defaultValues: { name: "" }
     });
 
@@ -34,6 +34,10 @@ function CompanyFormPage() {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.COMPANY]
             });
+
+            reset({
+                name: ""
+            })
         },
         onError: () => {
             Toast.show({
