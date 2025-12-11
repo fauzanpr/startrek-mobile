@@ -1,9 +1,8 @@
 import { AppConfig } from '@/config/app-config';
 import { useDebounce } from '@/hooks/use-debounce';
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { AnimatedFAB, Searchbar } from 'react-native-paper';
 import CompanyCard from './components/company-card';
 import { useCompaniesQuery } from './hooks/company';
@@ -21,12 +20,7 @@ function CompanyPage() {
     <>
       <View className='h-full'>
         <View className='p-6 flex gap-4'>
-          <View className='flex flex-row items-center gap-2'>
-            <Text className='text-2xl font-medium text-center'>Company</Text>
-            <Pressable onPress={() => refetch()}>
-              <Ionicons name='reload' size={18} className='bg-white p-1 border border-gray-200 rounded-lg' />
-            </Pressable>
-          </View>
+          <Text className='text-2xl font-medium text-center'>Company</Text>
 
           <View className='mb-4'>
             <Searchbar
@@ -39,16 +33,26 @@ function CompanyPage() {
             />
           </View>
 
-          <ScrollView className='flex gap-4 mb-20'>
-            {isFetching ? (
-              <ActivityIndicator size={18} />
-            ) : CompanyMapper(data?.results || [])?.map(company => (
-              <CompanyCard
-                key={company?.subid} 
-                data={company || {}}
+          {isFetching ? (
+            <ActivityIndicator />
+          ) : (
+            <FlatList
+              className='mb-20'
+              data={CompanyMapper(data?.results || [])}
+              renderItem={({ item }) => (
+                <CompanyCard
+                  data={item}
                 />
-            ))}
-          </ScrollView>
+              )}
+              refreshing={false}
+              onRefresh={() => {
+                refetch();
+              }}
+              onEndReached={() => {
+                console.log("masuk end");
+              }}
+            />
+          )}
         </View>
         <AnimatedFAB
           icon={"plus"}
