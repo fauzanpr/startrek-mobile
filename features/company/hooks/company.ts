@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from "@/constants/query-keys";
 import { MutateParamsType, MutationFunctionType, TPaginationResponseType } from "@/types/request";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { deleteCompany, getCompanyDetail, getCompanyList, postCompany, putCompany } from "../services/company";
 import { TCompany } from "../type";
 
@@ -8,6 +8,19 @@ export const useCompaniesQuery = (params?: Record<any, any>) => {
     return useQuery<TPaginationResponseType<TCompany[]>>({
         queryKey: [QUERY_KEYS.COMPANY, params],
         queryFn: () => getCompanyList(params),
+        retry: false
+    });
+}
+
+export const useCompaniesInfiniteQuery = (params?: Record<any, any>) => {
+    return useInfiniteQuery<TPaginationResponseType<TCompany[]>>({
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => !!lastPage?.next ? allPages?.length + 1 : undefined,
+        queryKey: [QUERY_KEYS.COMPANY, params],
+        queryFn: ({ pageParam }) => getCompanyList({
+            ...params,
+            page: pageParam
+        }),
         retry: false
     });
 }

@@ -5,16 +5,18 @@ import React, { useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { AnimatedFAB, Searchbar } from 'react-native-paper';
 import CompanyCard from './components/company-card';
-import { useCompaniesQuery } from './hooks/company';
+import { useCompaniesInfiniteQuery } from './hooks/company';
 import { CompanyMapper } from './mapper';
 
 function CompanyPage() {
   const [search, setSearch] = useState("");
   const searchDebounced = useDebounce(search, 500);
 
-  const { data, isFetching, refetch } = useCompaniesQuery({
+  const { data, isFetching, refetch, fetchNextPage, isFetchingNextPage } = useCompaniesInfiniteQuery({
     search: searchDebounced
   });
+
+  const companies = data?.pages?.flatMap(company => company?.results);
 
   return (
     <>
@@ -33,12 +35,12 @@ function CompanyPage() {
             />
           </View>
 
-          {isFetching ? (
+          {(isFetching && !isFetchingNextPage) ? (
             <ActivityIndicator />
           ) : (
             <FlatList
               className='mb-20'
-              data={CompanyMapper(data?.results || [])}
+              data={CompanyMapper(companies || [])}
               renderItem={({ item }) => (
                 <CompanyCard
                   data={item}
@@ -49,8 +51,15 @@ function CompanyPage() {
                 refetch();
               }}
               onEndReached={() => {
-                console.log("masuk end");
+                fetchNextPage();
               }}
+              ListFooterComponent={(
+                <>
+                {isFetchingNextPage ? (
+                  <ActivityIndicator />
+                ) : null}
+                </>
+              )}
             />
           )}
         </View>
