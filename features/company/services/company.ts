@@ -9,6 +9,11 @@ export const getCompanyList = (params?: Record<any, any>): Promise<TPaginationRe
     queryParams: params
 })
 
+export const getCompanyDetail = (id: string): Promise<TCompany> => api({
+    method: "GET",
+    urlKey: API_URL.COMPANY.DETAIL.replace(":id", id),
+})
+
 export const postCompany = (data?: Record<any,any>) => {
     return api({
         method: "POST",
@@ -21,5 +26,13 @@ export const deleteCompany = (id: string) => {
     return api({
         method: "DELETE",
         urlKey: API_URL.COMPANY.DETAIL.replace(":id", id),
+    })
+}
+
+export const putCompany = (id: string, data?: Record<any,any>) => {
+    return api({
+        method: "PUT",
+        urlKey: API_URL.COMPANY.DETAIL.replace(":id", id),
+        data: data
     })
 }

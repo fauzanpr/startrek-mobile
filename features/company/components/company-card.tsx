@@ -1,6 +1,7 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import React, { useRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
@@ -67,7 +68,9 @@ function CompanyCard({ data }: TCompanyCard) {
                 <Text className='text-lg text-gray-500'>Company Name: <Text className='font-medium text-primary'>{data.name}</Text></Text>
                 <Text className='text-lg text-gray-500'>Created: <Text className='font-medium text-primary'>{data.created}</Text></Text>
                 <View className='flex flex-row bg-gray-50 rounded-xl overflow-hidden mt-4'>
-                    <Pressable className='flex-1 p-2 flex items-center bg-blue-100'>
+                    <Pressable onPress={() => {
+                        router.replace(`/(tabs)/company/${data.subid}`)
+                    }} className='flex-1 p-2 flex items-center bg-blue-100'>
                         <Ionicons name='pencil' size={18} />
                     </Pressable>
 

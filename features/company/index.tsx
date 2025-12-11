@@ -56,7 +56,7 @@ function CompanyPage() {
           extended={false}
           color={"white"}
           onPress={() => {
-            router.replace("/(tabs)/company/add")
+            router.push("/(tabs)/company/add");
           }}
           style={{
             position: "absolute",
